@@ -129,5 +129,7 @@ with col4:
     st.metric(label="Volatility (σ)", value=f"{volatility:.2%}")
 
 with col5:
+    st.metric(label="Risk-Free Interest Rate", value=f"{interest_rate:.2%}")
+
    
 
