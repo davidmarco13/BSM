@@ -172,7 +172,7 @@ st.header("Monte Carlo Option Pricing - Simulated Stock Price Paths")
 
 # Sidebar Inputs for Monte Carlo Simulation
 with st.sidebar:
-    st.header("Montecarlo Simulations")
+    st.title("📈 Montecarlo Simulations")
     st.subheader("Parameters")
     simulations = st.number_input("Number of Simulations", min_value=100, max_value=10000, step=100, value=100)
     time_steps = st.number_input("Number of Time Steps", min_value=50, max_value=1000, step=10, value=365)
