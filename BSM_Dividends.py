@@ -167,11 +167,16 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-# Monte Carlo Simulation Section with Multiple Stock Price Paths
-
+# Monte Carlo Simulation Section with User Inputs for Variables
 st.header("Monte Carlo Option Pricing - Simulated Stock Price Paths")
 
-def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000, time_steps=100):
+# Sidebar Inputs for Monte Carlo Simulation
+with st.sidebar:
+    st.subheader("Monte Carlo Simulation Parameters")
+    simulations = st.number_input("Number of Simulations", min_value=100, max_value=10000, step=100, value=100)
+    time_steps = st.number_input("Number of Time Steps", min_value=50, max_value=1000, step=10, value=365)
+
+def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=100, time_steps=100):
     np.random.seed(42)
     dt = T / time_steps  # Time step
     paths = np.zeros((simulations, time_steps + 1))
@@ -183,8 +188,8 @@ def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000, time_steps=
 
     return paths
 
-# Running Monte Carlo Simulation for Multiple Stock Price Paths
-simulated_paths = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility, simulations=100, time_steps=365)
+# Running Monte Carlo Simulation with User Inputs
+simulated_paths = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility, simulations=simulations, time_steps=time_steps)
 
 # Plotting the simulated stock price paths
 plt.figure(figsize=(12, 6))
@@ -195,5 +200,3 @@ plt.xlabel('Time (Days)')
 plt.ylabel('Stock Price')
 plt.grid(True)
 st.pyplot(plt, clear_figure=True)
-
-
