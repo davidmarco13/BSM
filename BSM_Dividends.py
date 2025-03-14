@@ -94,13 +94,13 @@ for i, vol in enumerate(volatilities):
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 sns.heatmap(call_prices, xticklabels=np.round(spot_prices, 2), 
-            yticklabels=np.round(volatilities, 2), ax=axes[0], cmap="RdYlGn", annot=True)
+            yticklabels=np.round(volatilities, 2), ax=axes[0], cmap="RdYlGn_r", annot=True)
 axes[0].set_title("Call Price Heatmap")
 axes[0].set_xlabel("Spot Price")
 axes[0].set_ylabel("Volatility")
 
 sns.heatmap(put_prices, xticklabels=np.round(spot_prices, 2), 
-            yticklabels=np.round(volatilities, 2), ax=axes[1], cmap="RdYlGn", annot=True)
+            yticklabels=np.round(volatilities, 2), ax=axes[1], cmap="RdYlGn_r", annot=True)
 axes[1].set_title("Put Price Heatmap")
 axes[1].set_xlabel("Spot Price")
 axes[1].set_ylabel("Volatility")
