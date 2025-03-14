@@ -139,8 +139,8 @@ def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
     return call_price, put_price
 
 mc_call, mc_put = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility)
-st.write(f"Monte Carlo Call Option Price: {mc_call:.2f}")
-st.write(f"Monte Carlo Put Option Price: {mc_put:.2f}")
+#st.write(f"Monte Carlo Call Option Price: {mc_call:.2f}")
+#st.write(f"Monte Carlo Put Option Price: {mc_put:.2f}")
 
 # Display Call and Put Values in colored tables for Montecarlo Simulation
 col1, col2 = st.columns([1,1], gap="small")
