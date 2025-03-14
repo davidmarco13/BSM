@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from scipy.stats import norm
-import plotly.graph_objects as go
-from numpy import log, sqrt, exp  # Make sure to import these
+from numpy import log, sqrt, exp
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -64,47 +63,48 @@ class BlackScholes:
             strike * exp(-(interest_rate * time_to_maturity)) * norm.cdf(-d2)
         ) - current_price * exp(-dividend_yield * time_to_maturity) * norm.cdf(-d1)
 
-        self.call_price = call_price
-        self.put_price = put_price
         return call_price, put_price
 
 # Sidebar for User Inputs
 with st.sidebar:
     st.title("📊 Black-Scholes Model")
-    with st.expander("📌 Basic Inputs", expanded=True):
-        current_price = st.number_input("Current Stock Price", value=100.0, step=0.1)
-        strike = st.number_input("Strike Price", value=100.0, step=0.1)
-        time_to_maturity = st.slider("Time to Maturity (Years)", min_value=0.01, max_value=5.0, value=1.0, step=0.01)
-        volatility = st.slider("Volatility (σ)", min_value=0.01, max_value=1.0, value=0.2, step=0.01)
+    st.write("`Created by:`")
+    linkedin_url = "https://www.linkedin.com/in/mprudhvi/"
+    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`Prudhvi Reddy, Muppala`</a>', unsafe_allow_html=True)
+
+    current_price = st.number_input("Current Asset Price", value=100.0)
+    strike = st.number_input("Strike Price", value=100.0)
+    time_to_maturity = st.number_input("Time to Maturity (Years)", value=1.0)
+    volatility = st.number_input("Volatility (σ)", value=0.2)
+    dividend_yield = st.number_input("Dividend Yield (q)", value=0.0)
     
-    with st.expander("⚙️ Advanced Inputs", expanded=False):
-        interest_rate = get_risk_free_rate()
-        st.write(f"Risk-Free Interest Rate (Auto-Fetched): {interest_rate:.2%}")
-        dividend_yield = st.slider("Dividend Yield (q)", min_value=0.00, max_value=0.10, value=0.00, step=0.001)
+    interest_rate = get_risk_free_rate()
+    st.write(f"Risk-Free Interest Rate (Auto-Fetched): {interest_rate:.2%}")
 
-# Calculate Call and Put values
-bs_model = BlackScholes(time_to_maturity, strike, current_price, volatility, interest_rate, dividend_yield)
-call_price, put_price = bs_model.calculate_prices()
+# Generate heatmaps
+spot_prices = np.linspace(80, 120, 10)
+volatilities = np.linspace(0.1, 0.3, 10)
+call_prices = np.zeros((len(volatilities), len(spot_prices)))
+put_prices = np.zeros((len(volatilities), len(spot_prices)))
 
-# Display Call and Put Values in colored tables
-col1, col2 = st.columns([1,1], gap="small")
+for i, vol in enumerate(volatilities):
+    for j, spot in enumerate(spot_prices):
+        bs_model = BlackScholes(time_to_maturity, strike, spot, vol, interest_rate, dividend_yield)
+        call_prices[i, j], put_prices[i, j] = bs_model.calculate_prices()
 
-with col1:
-    st.markdown(f"""
-        <div class="metric-container metric-call">
-            <div>
-                <div class="metric-label">CALL Value</div>
-                <div class="metric-value">${call_price:.2f}</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+sns.heatmap(call_prices, xticklabels=np.round(spot_prices, 2), 
+            yticklabels=np.round(volatilities, 2), ax=axes[0], cmap="viridis", annot=True)
+axes[0].set_title("Call Price Heatmap")
+axes[0].set_xlabel("Spot Price")
+axes[0].set_ylabel("Volatility")
 
-with col2:
-    st.markdown(f"""
-        <div class="metric-container metric-put">
-            <div>
-                <div class="metric-label">PUT Value</div>
-                <div class="metric-value">${put_price:.2f}</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
+sns.heatmap(put_prices, xticklabels=np.round(spot_prices, 2), 
+            yticklabels=np.round(volatilities, 2), ax=axes[1], cmap="viridis", annot=True)
+axes[1].set_title("Put Price Heatmap")
+axes[1].set_xlabel("Spot Price")
+axes[1].set_ylabel("Volatility")
+
+plt.tight_layout()
+st.pyplot(fig, clear_figure=True)
+plt.close(fig)
