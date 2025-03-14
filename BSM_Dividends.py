@@ -94,6 +94,8 @@ st.table(input_df)
 
 # Black-Scholes Pricing Section
 st.header("Black-Scholes Option Pricing")
+st.info("Visual representation of call/put price variations under the Black-Scholes Model, incorporating dividend input.")
+
 spot_prices = np.linspace(80, 120, 10)
 volatilities = np.linspace(0.1, 0.3, 10)
 call_prices = np.zeros((len(volatilities), len(spot_prices)))
@@ -129,6 +131,8 @@ st.info("Visual representation of call/put price variations under the Black-Scho
 
 # Monte Carlo Simulation Section
 st.header("Monte Carlo Option Pricing")
+st.info("Calculates and displays call/put option prices using the Black-Scholes model with input for dividends.")
+
 def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
     np.random.seed(42)
     Z = np.random.standard_normal(simulations)
