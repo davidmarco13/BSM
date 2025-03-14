@@ -124,11 +124,6 @@ st.pyplot(fig, clear_figure=True)
 plt.close(fig)
 
 
-st.markdown("")
-st.title("Options Price Heatmap")
-st.info("Visual representation of call/put price variations under the Black-Scholes Model, incorporating dividend input.")
-
-
 # Monte Carlo Simulation Section
 st.header("Monte Carlo Option Pricing")
 st.info("Calculates and displays call/put option prices using the Black-Scholes model with input for dividends.")
@@ -172,6 +167,33 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-st.markdown("")
-st.title("Options Price Heatmap")
-st.info("Visual representation of call/put price variations under the Black-Scholes Model, incorporating dividend input.")
+# Monte Carlo Simulation Section with Multiple Stock Price Paths
+
+st.header("Monte Carlo Option Pricing - Simulated Stock Price Paths")
+
+def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000, time_steps=100):
+    np.random.seed(42)
+    dt = T / time_steps  # Time step
+    paths = np.zeros((simulations, time_steps + 1))
+    paths[:, 0] = S
+
+    for t in range(1, time_steps + 1):
+        Z = np.random.standard_normal(simulations)  # Random variables for each simulation
+        paths[:, t] = paths[:, t-1] * np.exp((r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * Z)
+
+    return paths
+
+# Running Monte Carlo Simulation for Multiple Stock Price Paths
+simulated_paths = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility, simulations=100, time_steps=365)
+
+# Plotting the simulated stock price paths
+plt.figure(figsize=(12, 6))
+for i in range(10):  # Plotting only 10 paths for clarity
+    plt.plot(simulated_paths[i], lw=1)
+plt.title('Simulated Stock Price Paths')
+plt.xlabel('Time (Days)')
+plt.ylabel('Stock Price')
+plt.grid(True)
+st.pyplot(plt, clear_figure=True)
+
+
