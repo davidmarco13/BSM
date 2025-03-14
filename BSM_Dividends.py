@@ -81,6 +81,17 @@ with st.sidebar:
     interest_rate = get_risk_free_rate()
     st.write(f"Risk-Free Interest Rate (Auto-Fetched): {interest_rate:.2%}")
 
+# Table of Inputs
+input_data = {
+    "Current Asset Price": [current_price],
+    "Strike Price": [strike],
+    "Time to Maturity (Years)": [time_to_maturity],
+    "Volatility (σ)": [volatility],
+    "Risk-Free Interest Rate": [interest_rate],
+}
+input_df = pd.DataFrame(input_data)
+st.table(input_df)
+
 # Black-Scholes Pricing Section
 st.header("Black-Scholes Option Pricing")
 spot_prices = np.linspace(80, 120, 10)
@@ -110,6 +121,36 @@ plt.tight_layout()
 st.pyplot(fig, clear_figure=True)
 plt.close(fig)
 
+# Display Call and Put Values in colored tables
+col1, col2 = st.columns([1,1], gap="small")
+
+with col1:
+    # Using the custom class for CALL value
+    st.markdown(f"""
+        <div class="metric-container metric-call">
+            <div>
+                <div class="metric-label">CALL Value</div>
+                <div class="metric-value">${call_price:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    # Using the custom class for PUT value
+    st.markdown(f"""
+        <div class="metric-container metric-put">
+            <div>
+                <div class="metric-label">PUT Value</div>
+                <div class="metric-value">${put_price:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("")
+st.title("Options Price Heatmap")
+st.info("Visual representation of call/put price variations under the Black-Scholes Model, incorporating dividend input.")
+
+
 # Monte Carlo Simulation Section
 st.header("Monte Carlo Option Pricing")
 def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
@@ -125,3 +166,32 @@ def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
 mc_call, mc_put = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility)
 st.write(f"Monte Carlo Call Option Price: {mc_call:.2f}")
 st.write(f"Monte Carlo Put Option Price: {mc_put:.2f}")
+
+# Display Call and Put Values in colored tables for Montecarlo Simulation
+col1, col2 = st.columns([1,1], gap="small")
+
+with col1:
+    # Using the custom class for CALL value
+    st.markdown(f"""
+        <div class="metric-container metric-call">
+            <div>
+                <div class="metric-label">CALL Value</div>
+                <div class="metric-value">${mc_call:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    # Using the custom class for PUT value
+    st.markdown(f"""
+        <div class="metric-container metric-put">
+            <div>
+                <div class="metric-label">PUT Value</div>
+                <div class="metric-value">${mc_put:.2f}</div>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("")
+st.title("Options Price Heatmap")
+st.info("Visual representation of call/put price variations under the Black-Scholes Model, incorporating dividend input.")
