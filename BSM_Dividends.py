@@ -121,30 +121,6 @@ plt.tight_layout()
 st.pyplot(fig, clear_figure=True)
 plt.close(fig)
 
-# Display Call and Put Values in colored tables
-col1, col2 = st.columns([1,1], gap="small")
-
-with col1:
-    # Using the custom class for CALL value
-    st.markdown(f"""
-        <div class="metric-container metric-call">
-            <div>
-                <div class="metric-label">CALL Value</div>
-                <div class="metric-value">${call_price:.2f}</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    # Using the custom class for PUT value
-    st.markdown(f"""
-        <div class="metric-container metric-put">
-            <div>
-                <div class="metric-label">PUT Value</div>
-                <div class="metric-value">${put_price:.2f}</div>
-            </div>
-        </div>
-    """, unsafe_allow_html=True)
 
 st.markdown("")
 st.title("Options Price Heatmap")
