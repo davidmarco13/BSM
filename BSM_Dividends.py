@@ -10,7 +10,7 @@ import seaborn as sns
 #######################
 # Page configuration
 st.set_page_config(
-    page_title="Black-Scholes Option Pricing Model (Dividends)",
+    page_title="Black-Scholes Option Pricing Model",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded")
@@ -69,8 +69,8 @@ class BlackScholes:
 with st.sidebar:
     st.title("📊 Black-Scholes Model")
     st.write("`Created by:`")
-    linkedin_url = "https://www.linkedin.com/in/david-marco-sierra-a3a440235/"
-    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`David Marco Sierra`</a>', unsafe_allow_html=True)
+    linkedin_url = "https://www.linkedin.com/in/mprudhvi/"
+    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`Prudhvi Reddy, Muppala`</a>', unsafe_allow_html=True)
 
     current_price = st.number_input("Current Asset Price", value=100.0)
     strike = st.number_input("Strike Price", value=100.0)
@@ -81,7 +81,8 @@ with st.sidebar:
     interest_rate = get_risk_free_rate()
     st.write(f"Risk-Free Interest Rate (Auto-Fetched): {interest_rate:.2%}")
 
-# Generate heatmaps
+# Black-Scholes Pricing Section
+st.header("Black-Scholes Option Pricing")
 spot_prices = np.linspace(80, 120, 10)
 volatilities = np.linspace(0.1, 0.3, 10)
 call_prices = np.zeros((len(volatilities), len(spot_prices)))
@@ -109,27 +110,18 @@ plt.tight_layout()
 st.pyplot(fig, clear_figure=True)
 plt.close(fig)
 
-# Tabla de Arriba y cosas esteticas
-st.subheader("📌 Model Inputs")
+# Monte Carlo Simulation Section
+st.header("Monte Carlo Option Pricing")
+def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
+    np.random.seed(42)
+    Z = np.random.standard_normal(simulations)
+    ST = S * np.exp((r - 0.5 * sigma ** 2) * T + sigma * np.sqrt(T) * Z)
+    call_payoff = np.maximum(ST - K, 0)
+    put_payoff = np.maximum(K - ST, 0)
+    call_price = np.exp(-r * T) * np.mean(call_payoff)
+    put_price = np.exp(-r * T) * np.mean(put_payoff)
+    return call_price, put_price
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(label="Current Asset Price", value=f"${current_price:.2f}")
-
-with col2:
-    st.metric(label="Strike Price", value=f"${strike:.2f}")
-
-with col3:
-    st.metric(label="Time to Maturity", value=f"{time_to_maturity:.2f} years")
-
-col4, col5 = st.columns(2)
-
-with col4:
-    st.metric(label="Volatility (σ)", value=f"{volatility:.2%}")
-
-with col5:
-    st.metric(label="Risk-Free Interest Rate", value=f"{interest_rate:.2%}")
-
-   
-
+mc_call, mc_put = monte_carlo_option_pricing(current_price, strike, time_to_maturity, interest_rate, volatility)
+st.write(f"Monte Carlo Call Option Price: {mc_call:.2f}")
+st.write(f"Monte Carlo Put Option Price: {mc_put:.2f}")
