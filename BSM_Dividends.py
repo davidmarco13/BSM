@@ -167,9 +167,6 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-# Monte Carlo Simulation Section with User Inputs for Variables
-st.header("Monte Carlo Option Pricing - Simulated Stock Price Paths")
-
 # Sidebar Inputs for Monte Carlo Simulation
 with st.sidebar:
     st.title("📈 Montecarlo Simulations")
