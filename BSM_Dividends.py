@@ -126,7 +126,7 @@ plt.close(fig)
 
 # Monte Carlo Simulation Section
 st.header("Monte Carlo Option Pricing")
-st.info("Calculates and displays call/put option prices using the Black-Scholes model with input for dividends.")
+st.info("Simulates and visualizes multiple stock price paths over time using Monte Carlo simulation, with adjustable parameters for the number of simulations and time steps, while calculating the corresponding call and put prices from the Black-Scholes model.")
 
 def monte_carlo_option_pricing(S, K, T, r, sigma, simulations=10000):
     np.random.seed(42)
