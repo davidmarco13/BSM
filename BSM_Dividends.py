@@ -10,7 +10,7 @@ import seaborn as sns
 #######################
 # Page configuration
 st.set_page_config(
-    page_title="Black-Scholes Option Pricing Model",
+    page_title="Black-Scholes Option Pricing Model (Dividends)",
     page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded")
@@ -69,8 +69,8 @@ class BlackScholes:
 with st.sidebar:
     st.title("📊 Black-Scholes Model")
     st.write("`Created by:`")
-    linkedin_url = "https://www.linkedin.com/in/mprudhvi/"
-    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`Prudhvi Reddy, Muppala`</a>', unsafe_allow_html=True)
+    linkedin_url = "https://www.linkedin.com/in/david-marco-sierra-a3a440235/"
+    st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none; color: inherit;"><img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="25" height="25" style="vertical-align: middle; margin-right: 10px;">`David Marco Sierra`</a>', unsafe_allow_html=True)
 
     current_price = st.number_input("Current Asset Price", value=100.0)
     strike = st.number_input("Strike Price", value=100.0)
@@ -94,13 +94,13 @@ for i, vol in enumerate(volatilities):
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 sns.heatmap(call_prices, xticklabels=np.round(spot_prices, 2), 
-            yticklabels=np.round(volatilities, 2), ax=axes[0], cmap="viridis", annot=True)
+            yticklabels=np.round(volatilities, 2), ax=axes[0], cmap="RdYlGn", annot=True)
 axes[0].set_title("Call Price Heatmap")
 axes[0].set_xlabel("Spot Price")
 axes[0].set_ylabel("Volatility")
 
 sns.heatmap(put_prices, xticklabels=np.round(spot_prices, 2), 
-            yticklabels=np.round(volatilities, 2), ax=axes[1], cmap="viridis", annot=True)
+            yticklabels=np.round(volatilities, 2), ax=axes[1], cmap="RdYlGn", annot=True)
 axes[1].set_title("Put Price Heatmap")
 axes[1].set_xlabel("Spot Price")
 axes[1].set_ylabel("Volatility")
